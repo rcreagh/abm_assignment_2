@@ -89,4 +89,10 @@ maximize(Z)
 writeln("LP Solution:")          ! Solution printing
 writeln(" Profit (Euros): ", getobjval)
 
+forall(i in number) do
+writeln("Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
+
+writeln("Sales Volume: ", getsol(SELLING_VOLUME(i)))
+end-do
+
 end-model
