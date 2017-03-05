@@ -20,35 +20,59 @@ model java_coffee_problem
  uses "mmxprs"                   ! Gain access to the Xpress-Optimizer solver
 
  ! Declarations section
- declaration
+ declarations
     number = 1..3
-    PURCHASE_VOLUME: array(number) of mpvar     ! Purchase volume
-    SELLING_VOLUME: array(number) of mpvar     ! Sales volume
+    PURCHASE_VOLUME, SELLING_VOLUME: array(number) of mpvar
+  INITIAL_STOCK = 1000
+  INITIAL_CASH_BALANCE = 20000
   MONTHS: array(number) of string
   SELLING_PRICES: array(number) of real
   PURCHASE_PRICES: array(number) of real
-  INITIAL_CASH_BALANCE: array(0..3) of real
-  INITIAL_STOCK_LEVEL: array(0..3) of real
+  CASH_BALANCE: array(number) of real     ! Cash at end of month
+  STOCK_LEVEL: array(number) of real      ! Stock at end of month
  end-declarations
 
  initializations from 'java_coffee.dat'
+   MONTHS
+   SELLING_PRICES
+   PURCHASE_PRICES
  end-initializations
 
 ! Objective function
-Z:=sum(i in number) SELLING_PRICES(i)*SELLING_VOLUME(i) - PURCHASE_PRICES(i)*PURCHASE_VOLUME(i)
+Z:=sum(i in number) SELLING_PRICES(i)*SELLING_VOLUME(i) - sum(i in number) PURCHASE_PRICES(i)*PURCHASE_VOLUME(i)
 
 ! Constraints
 
-INITIAL_STOCK_LEVEL(0) = 1000
+! Stock level constraints
 
-sum(i in 1..2) INITIAL_STOCK_LEVEL(i) = INITIAL_STOCK_LEVEL(i-1) + PURCHASE_VOLUME(i-1) - SELLING_VOLUME(i-1)
+forall (i in number) do
+if (i>1) then
+STOCK_LEVEL(i) = STOCK_LEVEL(i-1) + PURCHASE_VOLUME(i) - SELLING_VOLUME(i)
+else
+STOCK_LEVEL(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
+end-if
+end-do
 
-INITIAL_STOCK_LEVEL(3) = 2000
+STOCK_LEVEL(3) >= 2000
 
-sum(i in number) SELLING_VOLUME(i) <= INITIAL_STOCK_LEVEL(i-1)
+sum(i in number) STOCK_LEVEL(i) <= 5000 ! Cannot store more than 5000kg at any one time
 
-sum(in in number) INITIAL_STOCK_LEVEL(i) <= 5000 ! Cannot store more than 5000kg at any one time
+! Cash Constraints
 
-INITIAL_CASH_BALANCE(0) = 20000
+forall (i in number) do
+if (i>1) then
+CASH_BALANCE(i) = CASH_BALANCE(i-1) + SELLING_VOLUME(i)*SELLING_PRICES(i) - PURCHASE_VOLUME(i)*PURCHASE_PRICES(i)
+else
+CASH_BALANCE(1) = INITIAL_CASH_BALANCE + SELLING_VOLUME(1)*SELLING_PRICES(1) - PURCHASE_VOLUME(1)*PURCHASE_PRICES(1)
 
-sum(i in number) INITIAL_CASH_BALANCE(i) 
+sum(i in number) SELLING_VOLUME(i) <= sum(i in number)STOCK_LEVEL(i-1)
+
+sum(i in number) CASH_BALANCE(i) >= 0
+sum(i in number) SELLING_VOLUME(i) >= 0
+sum(i in number) PURCHASE_VOLUME(i) >= 0
+sum(i in number) STOCK_LEVEL(i) >= 0
+
+maximize(Z)
+
+writeln("LP Solution:")          ! Solution printing
+writeln(" Profit (Euros): ", getobjval)
