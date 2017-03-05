@@ -69,7 +69,15 @@ CASH_BALANCE(1) = INITIAL_CASH_BALANCE + SELLING_VOLUME(1)*SELLING_PRICES(1) - P
 end-if
 end-do
 
-sum(i in number) SELLING_VOLUME(i) <= sum(i in number)STOCK_LEVEL(i-1)
+! Selling constraints
+
+forall (i in number) do
+if (i>1) then
+SELLING_VOLUME(i) <= STOCK_LEVEL(i-1)
+else
+SELLING_VOLUME(1) <= INITIAL_STOCK
+end-if
+end-do
 
 sum(i in number) CASH_BALANCE(i) >= 0
 sum(i in number) SELLING_VOLUME(i) >= 0
