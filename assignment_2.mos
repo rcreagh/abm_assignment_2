@@ -1,0 +1,33 @@
+(!*******************************************************
+  * Assignment 1. Question 2.                           *
+  * ======================                              *
+  *                                                     *
+  * file assignment_1_q2.mos                            *
+  * ``````````````                                      *
+  * Find the amoung of units of golden glow, autumn     *
+  * fresh and sparkling light ciders to produce.        *
+  *                                                     *
+  * Note: All code in this program is based on the      *
+  * part2_clothing_sweatshirt.mos program covered in    *
+  * class.                                              *
+  *                                                     *
+  * Author: Robert Creagh                               *
+  * Student Number: 15200115                            *
+  *                                                     *
+  *******************************************************!)
+
+model java_coffee_problem
+ uses "mmxprs"                   ! Gain access to the Xpress-Optimizer solver
+
+ ! Declarations section
+ declaration
+    number - 0..3
+    x: array(number) of mpvar     ! Decision variables
+  time_period: array(number) of string
+  selling_price: array(number) of real
+  buying_price: array(number) of real
+  cash_balance: array(number) of real
+  stock_level: array(number) of real
+ end-declarations
+
+! Assign data values
