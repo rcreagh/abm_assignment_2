@@ -31,3 +31,5 @@ model java_coffee_problem
  end-declarations
 
 ! Assign data values
+time_period:: ["t_0", "t_1", "t_2", "t_3"]
+selling_price:: []
