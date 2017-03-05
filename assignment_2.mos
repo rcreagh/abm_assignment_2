@@ -28,8 +28,8 @@ model java_coffee_problem
   MONTHS: array(number) of string
   SELLING_PRICES: array(number) of real
   PURCHASE_PRICES: array(number) of real
-  CASH_BALANCE: array(number) of real     ! Cash at end of month
-  STOCK_LEVEL: array(number) of real      ! Stock at end of month
+  CASH_BALANCE: array(number) of mpvar     ! Cash at end of month
+  STOCK_LEVEL: array(number) of mpvar     ! Stock at end of month
  end-declarations
 
  initializations from 'java_coffee.dat'
