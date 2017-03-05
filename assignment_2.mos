@@ -21,15 +21,34 @@ model java_coffee_problem
 
  ! Declarations section
  declaration
-    number - 0..3
-    x: array(number) of mpvar     ! Decision variables
-  time_period: array(number) of string
-  selling_price: array(number) of real
-  buying_price: array(number) of real
-  cash_balance: array(number) of real
-  stock_level: array(number) of real
+    number = 1..3
+    PURCHASE_VOLUME: array(number) of mpvar     ! Purchase volume
+    SELLING_VOLUME: array(number) of mpvar     ! Sales volume
+  MONTHS: array(number) of string
+  SELLING_PRICES: array(number) of real
+  PURCHASE_PRICES: array(number) of real
+  INITIAL_CASH_BALANCE: array(0..3) of real
+  INITIAL_STOCK_LEVEL: array(0..3) of real
  end-declarations
 
-! Assign data values
-time_period:: ["t_0", "t_1", "t_2", "t_3"]
-selling_price:: []
+ initializations from 'java_coffee.dat'
+ end-initializations
+
+! Objective function
+Z:=sum(i in number) SELLING_PRICES(i)*SELLING_VOLUME(i) - PURCHASE_PRICES(i)*PURCHASE_VOLUME(i)
+
+! Constraints
+
+INITIAL_STOCK_LEVEL(0) = 1000
+
+sum(i in 1..2) INITIAL_STOCK_LEVEL(i) = INITIAL_STOCK_LEVEL(i-1) + PURCHASE_VOLUME(i-1) - SELLING_VOLUME(i-1)
+
+INITIAL_STOCK_LEVEL(3) = 2000
+
+sum(i in number) SELLING_VOLUME(i) <= INITIAL_STOCK_LEVEL(i-1)
+
+sum(in in number) INITIAL_STOCK_LEVEL(i) <= 5000 ! Cannot store more than 5000kg at any one time
+
+INITIAL_CASH_BALANCE(0) = 20000
+
+sum(i in number) INITIAL_CASH_BALANCE(i) 
