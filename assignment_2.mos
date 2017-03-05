@@ -64,6 +64,8 @@ if (i>1) then
 CASH_BALANCE(i) = CASH_BALANCE(i-1) + SELLING_VOLUME(i)*SELLING_PRICES(i) - PURCHASE_VOLUME(i)*PURCHASE_PRICES(i)
 else
 CASH_BALANCE(1) = INITIAL_CASH_BALANCE + SELLING_VOLUME(1)*SELLING_PRICES(1) - PURCHASE_VOLUME(1)*PURCHASE_PRICES(1)
+end-if
+end-do
 
 sum(i in number) SELLING_VOLUME(i) <= sum(i in number)STOCK_LEVEL(i-1)
 
@@ -76,3 +78,5 @@ maximize(Z)
 
 writeln("LP Solution:")          ! Solution printing
 writeln(" Profit (Euros): ", getobjval)
+
+end-model
