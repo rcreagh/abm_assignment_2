@@ -1,18 +1,14 @@
 (!*******************************************************
-  * Assignment 1. Question 2.                           *
+  * Assignment 2                                        *
   * ======================                              *
   *                                                     *
-  * file assignment_1_q2.mos                            *
+  * file assignment_2.mos                               *
   * ``````````````                                      *
-  * Find the amoung of units of golden glow, autumn     *
-  * fresh and sparkling light ciders to produce.        *
+  * Find the amount of kgs of coffee to buy and sell    *
+  * each month for Q1.                                  *
   *                                                     *
-  * Note: All code in this program is based on the      *
-  * part2_clothing_sweatshirt.mos program covered in    *
-  * class.                                              *
-  *                                                     *
-  * Author: Robert Creagh                               *
-  * Student Number: 15200115                            *
+  * Authors: Robert Creagh, Max Buckley                 *
+  * Student Numbers: 15200115, 15203431                 *
   *                                                     *
   *******************************************************!)
 
@@ -57,7 +53,7 @@ end-do
 
 STOCK_LEVEL(3) >= 2000
 
-sum(i in number) STOCK_LEVEL(i) <= 5000 ! Cannot store more than 5000kg at any one time
+forall(i in number) STOCK_LEVEL(i) <= 5000 ! Cannot store more than 5000kg at any one time
 
 ! Cash Constraints
 
@@ -90,9 +86,10 @@ writeln("LP Solution:")          ! Solution printing
 writeln(" Profit (Euros): ", getobjval)
 
 forall(i in number) do
-writeln("Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
+writeln("Month: ", MONTHS(i))
+writeln("  Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
+writeln("  Sales Volume: ", getsol(SELLING_VOLUME(i)))
 
-writeln("Sales Volume: ", getsol(SELLING_VOLUME(i)))
 end-do
 
 end-model
