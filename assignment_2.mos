@@ -23,8 +23,8 @@ model java_coffee_problem
  declarations
     number = 1..3
     PURCHASE_VOLUME, SELLING_VOLUME: array(number) of mpvar
-  INITIAL_STOCK = 1000
-  INITIAL_CASH_BALANCE = 20000
+  INITIAL_STOCK: real
+  INITIAL_CASH_BALANCE: real
   MONTHS: array(number) of string
   SELLING_PRICES: array(number) of real
   PURCHASE_PRICES: array(number) of real
@@ -36,6 +36,8 @@ model java_coffee_problem
    MONTHS
    SELLING_PRICES
    PURCHASE_PRICES
+   INITIAL_STOCK
+   INITIAL_CASH_BALANCE
  end-initializations
 
 ! Objective function
