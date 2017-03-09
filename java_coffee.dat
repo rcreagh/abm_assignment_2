@@ -1,6 +1,8 @@
 ! Data file for 'java_coffee.mos'.
 
-MONTHS: ["Jan" "Feb" "Mar"] ! Data labels.
+N_MONTHS: 3 ! Number of months.
+
+MONTH_NAMES: ["Jan" "Feb" "Mar"] ! Data labels.
 SELLING_PRICES: [3.1 3.25 2.95] ! Euros
 PURCHASE_PRICES: [2.85 2.8 2.9] ! Euros
 

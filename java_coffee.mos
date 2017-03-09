@@ -1,0 +1,96 @@
+(!*******************************************************
+  * Assignment 2                                        *
+  * ======================                              *
+  *                                                     *
+  * file java_coffee.mos                                *
+  * ``````````````                                      *
+  * Find the optimal amount of kgs of coffee to buy and *
+  * sell each month during Q1.                          *
+  *                                                     *
+  * Authors: Robert Creagh, Max Buckley                 *
+  * Student Numbers: 15200115, 15203431                 *
+  *                                                     *
+  *******************************************************!)
+
+model java_coffee_problem
+ uses "mmxprs"                   ! Gain access to the Xpress-Optimizer solver
+
+  ! Need to declare and initalize N_MONTHS first so as to be able to initalize variable length arrays below.
+  declarations
+    N_MONTHS: integer
+  end-declarations
+  initializations from 'java_coffee.dat'
+    N_MONTHS
+  end-initializations
+
+ ! Main declarations section
+ declarations
+  indices = 1..N_MONTHS ! Indices for indexing our months.
+  PURCHASE_VOLUME, SELLING_VOLUME: array(indices) of mpvar
+  INITIAL_STOCK: real
+  INITIAL_CASH_BALANCE: real
+  MONTH_NAMES: array(indices) of string
+  SELLING_PRICES: array(indices) of real
+  PURCHASE_PRICES: array(indices) of real
+  CASH_BALANCE: array(indices) of mpvar     ! Cash at end of month
+  STOCK_LEVEL: array(indices) of mpvar     ! Stock at end of month
+  WAREHOUSE_SIZE_LIMIT: real
+  FINAL_STOCK_TARGET: real
+ end-declarations
+
+ initializations from 'java_coffee.dat'
+   MONTH_NAMES
+   SELLING_PRICES
+   PURCHASE_PRICES
+   INITIAL_STOCK
+   INITIAL_CASH_BALANCE
+   WAREHOUSE_SIZE_LIMIT
+   FINAL_STOCK_TARGET
+ end-initializations
+! Objective function
+profit := (sum(i in indices) SELLING_PRICES(i) * SELLING_VOLUME(i) -
+     sum(i in indices) PURCHASE_PRICES(i) * PURCHASE_VOLUME(i))
+
+! Constraints
+
+! Stock level constraints
+STOCK_LEVEL(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
+
+forall (i in 2..N_MONTHS) do
+  STOCK_LEVEL(i) = STOCK_LEVEL(i - 1) + PURCHASE_VOLUME(i) - SELLING_VOLUME(i)
+end-do
+
+! Set final month stock target.
+STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
+
+forall(i in indices) STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT ! Cannot store more than 5000kg at any one time
+
+! Cash Constraints
+
+CASH_BALANCE(1) = INITIAL_CASH_BALANCE + SELLING_VOLUME(1) * SELLING_PRICES(1) - PURCHASE_VOLUME(1) * PURCHASE_PRICES(1)
+
+forall (i in 2..N_MONTHS) do
+  CASH_BALANCE(i) = CASH_BALANCE(i - 1) + SELLING_VOLUME(i) * SELLING_PRICES(i) - PURCHASE_VOLUME(i) * PURCHASE_PRICES(i)
+end-do
+
+! Selling constraints
+SELLING_VOLUME(1) <= INITIAL_STOCK
+forall (i in 2..N_MONTHS) do
+    SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
+end-do
+
+maximize(profit)
+
+writeln("LP Solution:")          ! Solution printing
+writeln(" Profit (Euros): ", getobjval)
+writeln(" Stock remaining in warehouse: ", getsol(STOCK_LEVEL(N_MONTHS)))
+
+
+forall(i in indices) do
+writeln("Month: ", MONTH_NAMES(i))
+writeln("  Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
+writeln("  Sales Volume: ", getsol(SELLING_VOLUME(i)))
+
+end-do
+
+end-model
