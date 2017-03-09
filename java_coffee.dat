@@ -2,7 +2,7 @@
 
 N_MONTHS: 3 ! Number of months.
 
-MONTH_NAMES: ["Jan" "Feb" "Mar"] ! Data labels.
+MONTH_NAMES: ["Jan" "Feb" "Mar"] ! String data labels.
 SELLING_PRICES: [3.1 3.25 2.95] ! Euros
 PURCHASE_PRICES: [2.85 2.8 2.9] ! Euros
 
