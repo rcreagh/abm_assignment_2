@@ -108,13 +108,13 @@ model java_coffee_problem
 
   print_status ! Pretty print status of solution.
   writeln("LP Solution:") ! Solution printing
-  writeln(" Profit (Euros): ", getobjval)
-  writeln(" Stock remaining in warehouse: ", getsol(STOCK_LEVEL(N_MONTHS)))
+  writeln("    Profit (Euros): ", getobjval)
+  writeln("    Stock remaining in warehouse: ", getsol(STOCK_LEVEL(N_MONTHS)))
 
   forall(i in indices) do
     writeln("Month: ", MONTH_NAMES(i))
-    writeln("  Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
-    writeln("  Sales Volume: ", getsol(SELLING_VOLUME(i)))
+    writeln("    Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
+    writeln("    Sales Volume: ", getsol(SELLING_VOLUME(i)))
   end-do
 
 end-model
