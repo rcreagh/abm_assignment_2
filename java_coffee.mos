@@ -99,14 +99,13 @@ model java_coffee_problem
   ! Constraints
 
   ! Set final month stock target.
-  CONSTRAINTS(1):= STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
+  CONSTRAINTS(1):= SELLING_VOLUME(1) <= INITIAL_STOCK
+  CONSTRAINTS(2):= STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
 
-  CONSTRAINTS(2):= forall(i in indices) STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
+  forall(i in indices) CONSTRAINTS(2 + i):= STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
 
-  ! Selling constraints
-  CONSTRAINTS(3):= SELLING_VOLUME(1) <= INITIAL_STOCK
-  CONSTRAINTS(4):= forall (i in 2..N_MONTHS) do
-    SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
+  forall (i in 2..N_MONTHS) do
+    CONSTRAINTS(2 + N_MONTHS + i):= SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
   end-do
 
   maximize(profit)
