@@ -34,6 +34,7 @@ model java_coffee_problem
     indices = 1..N_MONTHS ! Indices for indexing our months.
     no_of_constraints = 1..N_CONSTRAINTS ! Labels for numbering constraints.
     CONSTRAINTS: array(no_of_constraints) of linctr
+    CONSTRAINT_NAMES: array(no_of_constraints) of string
     PURCHASE_VOLUME, SELLING_VOLUME: array(indices) of mpvar
     INITIAL_STOCK: real
     INITIAL_CASH_BALANCE: real
@@ -44,6 +45,8 @@ model java_coffee_problem
     STOCK_LEVEL: array(indices) of mpvar ! Stock at end of month
     WAREHOUSE_SIZE_LIMIT: real
     FINAL_STOCK_TARGET: real
+    feasibleU: array(no_of_constraints) of real !array to hold the upper value of feasibility range of the constraints
+    feasibleL: array(no_of_constraints) of real !array to hold the lower feasibility range values
   end-declarations
 
   initializations from 'java_coffee.dat'
@@ -54,6 +57,7 @@ model java_coffee_problem
     INITIAL_CASH_BALANCE
     WAREHOUSE_SIZE_LIMIT
     FINAL_STOCK_TARGET
+    CONSTRAINT_NAMES
   end-initializations
 
 
@@ -104,8 +108,8 @@ model java_coffee_problem
 
   forall(i in indices) CONSTRAINTS(2 + i):= STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
 
-  forall (i in 2..N_MONTHS) do
-    CONSTRAINTS(2 + N_MONTHS + i):= SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
+  forall (i in 2..N_MONTHS) do ! Start from 2 as already set for month 1.
+    CONSTRAINTS(1 + N_MONTHS + i):= SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
   end-do
 
   maximize(profit)
@@ -119,6 +123,18 @@ model java_coffee_problem
     writeln("Month: ", MONTH_NAMES(i))
     writeln("    Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
     writeln("    Sales Volume: ", getsol(SELLING_VOLUME(i)))
+  end-do
+
+  ! Sensitivity analysis inspired by sensitivity_pottery_example.mos model
+  ! covered in class.
+  forall ( j in no_of_constraints) do
+        balance(j) := getsol(CONSTRAINTS(j)) !balancing slack or surplus
+    writeln("Slack/surplus evaluation of ",CONSTRAINT_NAMES(j)," is: ",balance(j) )
+        feasibleU(j) := getrange(XPRS_UPACT, CONSTRAINTS(j)) !I've over written feasible(j)
+        writeln("RHS; Upper feasible limit of ", CONSTRAINT_NAMES(j)," is: ", feasibleU(j))
+        feasibleL(j) := getrange(XPRS_LOACT, CONSTRAINTS(j))
+        writeln("RHS; Lower feasible limit of ", CONSTRAINT_NAMES(j)," is: ", feasibleL(j))
+     writeln(" ")
   end-do
 
 end-model
