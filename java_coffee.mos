@@ -32,7 +32,8 @@ model java_coffee_problem
    ! Main declarations section
   declarations
     indices = 1..N_MONTHS ! Indices for indexing our months.
-    constraints = 1..N_CONSTRAINTS ! Labels for numbering constraints.
+    no_of_constraints = 1..N_CONSTRAINTS ! Labels for numbering constraints.
+    CONSTRAINTS: array(no_of_constraints) of linctr
     PURCHASE_VOLUME, SELLING_VOLUME: array(indices) of mpvar
     INITIAL_STOCK: real
     INITIAL_CASH_BALANCE: real
@@ -98,13 +99,13 @@ model java_coffee_problem
   ! Constraints
 
   ! Set final month stock target.
-  constraints(1):= STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
+  CONSTRAINTS(1):= STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
 
-  constraints(2):= forall(i in indices) STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
+  CONSTRAINTS(2):= forall(i in indices) STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
 
   ! Selling constraints
-  constraints(3):= SELLING_VOLUME(1) <= INITIAL_STOCK
-  constraints(4):= forall (i in 2..N_MONTHS) do
+  CONSTRAINTS(3):= SELLING_VOLUME(1) <= INITIAL_STOCK
+  CONSTRAINTS(4):= forall (i in 2..N_MONTHS) do
     SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
   end-do
 
