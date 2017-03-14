@@ -118,6 +118,7 @@ model java_coffee_problem
   writeln("LP Solution:") ! Solution printing
   writeln("    Profit (Euros): ", getobjval)
   writeln("    Stock remaining in warehouse: ", getsol(STOCK_LEVEL(N_MONTHS)))
+  writeln("    Closing cash balance: ", 20000 + getobjval)
 
   forall(i in indices) do
     writeln("Month: ", MONTH_NAMES(i))
