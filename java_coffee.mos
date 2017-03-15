@@ -144,4 +144,10 @@ writeln("***********Dual values for constraints********")
 end-do !You might want to check out the strfmt procedure to format output display
 writeln("")
 
+writeln("***********Reduced Costs for activities********")
+forall (i in indices) do
+  writeln("Buying Price ", MONTH_NAMES(i), ": ", getrcost(PURCHASE_VOLUME(i)))
+  writeln("Selling Price ", MONTH_NAMES(i), ": ", getrcost(SELLING_VOLUME(i)))
+end-do
+
 end-model
