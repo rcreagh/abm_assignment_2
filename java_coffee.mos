@@ -138,4 +138,10 @@ model java_coffee_problem
      writeln(" ")
   end-do
 
+writeln("***********Dual values for constraints********")
+ forall ( j in no_of_constraints) do
+  writeln("Dual Value for ",CONSTRAINT_NAMES(j)," is: ",getdual(CONSTRAINTS(j)))
+end-do !You might want to check out the strfmt procedure to format output display
+writeln("")
+
 end-model
