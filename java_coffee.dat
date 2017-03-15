@@ -1,7 +1,7 @@
 ! Data file for 'java_coffee.mos'.
 
 N_MONTHS: 3 ! Number of months.
-N_CONSTRAINTS: 7 ! Number of constraints.
+N_CONSTRAINTS: 7 ! Number of constraints (N_MONTHS*2 + 1)
 
 MONTH_NAMES: ["Jan" "Feb" "Mar"] ! String data labels.
 CONSTRAINT_NAMES: ["Initial Stock" "Closing Stock Target" 
