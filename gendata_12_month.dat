@@ -1,0 +1,17 @@
+
+N_MONTHS: 12 ! Number of months.
+N_CONSTRAINTS: 25 ! Number of constraints (N_MONTHS*2 + 1)
+
+MONTH_NAMES: ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"] ! String data labels.
+CONSTRAINT_NAMES: ["Initial Stock" "Closing Stock Target"
+                   "Warehouse size Jan" "Warehouse size Feb" "Warehouse size Mar" "Warehouse size Apr" "Warehouse size May" "Warehouse size Jun" "Warehouse size Jul" "Warehouse size Aug" "Warehouse size Sep" "Warehouse size Oct" "Warehouse size Nov" "Warehouse size Dec" "Stock level Jan" "Stock level Feb" "Stock level Mar" "Stock level Apr" "Stock level May" "Stock level Jun" "Stock level Jul" "Stock level Aug" "Stock level Sep" "Stock level Oct" "Stock level Nov" "Stock level Dec"]
+SELLING_PRICES: [3.31 3.12 3.13 2.99 3.0 3.01 3.21 3.0 3.11 3.18 3.02 3.08] ! Euros
+PURCHASE_PRICES: [2.92 2.77 2.81 2.82 2.8 2.79 2.81 2.84 2.87 2.89 2.83 2.84] ! Euros
+
+INITIAL_CASH_BALANCE: 20000 ! Euros
+INITIAL_STOCK: 1000 ! Units
+
+WAREHOUSE_SIZE_LIMIT: 5000 ! Units
+
+FINAL_STOCK_TARGET: 2000 ! Units
+
