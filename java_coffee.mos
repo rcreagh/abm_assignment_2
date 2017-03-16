@@ -41,8 +41,8 @@ model java_coffee_problem
     MONTH_NAMES: array(indices) of string
     SELLING_PRICES: array(indices) of real
     PURCHASE_PRICES: array(indices) of real
-    CASH_BALANCE: array(indices) of mpvar ! Cash at end of month
-    STOCK_LEVEL: array(indices) of mpvar ! Stock at end of month
+    CLOSING_CASH_BALANCE: array(indices) of mpvar ! Cash at end of month
+    CLOSING_STOCK: array(indices) of mpvar ! Stock at end of month
     WAREHOUSE_SIZE_LIMIT: real
     FINAL_STOCK_TARGET: real
     feasibleU: array(no_of_constraints) of real !array to hold the upper value of feasibility range of the constraints
@@ -81,18 +81,18 @@ model java_coffee_problem
   ! Variable definitions
 
   ! Define stock level calculations
-  STOCK_LEVEL(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
+  CLOSING_STOCK(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
 
   forall (i in 2..N_MONTHS) do
-    STOCK_LEVEL(i) = STOCK_LEVEL(i - 1) + PURCHASE_VOLUME(i) - SELLING_VOLUME(i)
+    CLOSING_STOCK(i) = CLOSING_STOCK(i - 1) + PURCHASE_VOLUME(i) - SELLING_VOLUME(i)
   end-do
 
   ! Define cash balance calculations
-  CASH_BALANCE(1) = (INITIAL_CASH_BALANCE + SELLING_VOLUME(1) *
+  CLOSING_CASH_BALANCE(1) = (INITIAL_CASH_BALANCE + SELLING_VOLUME(1) *
                      SELLING_PRICES(1) - PURCHASE_VOLUME(1) * PURCHASE_PRICES(1))
 
   forall (i in 2..N_MONTHS) do
-    CASH_BALANCE(i) = (CASH_BALANCE(i - 1) + SELLING_VOLUME(i) *
+    CLOSING_CASH_BALANCE(i) = (CLOSING_CASH_BALANCE(i - 1) + SELLING_VOLUME(i) *
                        SELLING_PRICES(i) - PURCHASE_VOLUME(i) * PURCHASE_PRICES(i))
   end-do
 
@@ -104,12 +104,22 @@ model java_coffee_problem
 
   ! Set final month stock target.
   CONSTRAINTS(1):= SELLING_VOLUME(1) <= INITIAL_STOCK
-  CONSTRAINTS(2):= STOCK_LEVEL(N_MONTHS) >= FINAL_STOCK_TARGET
+  CONSTRAINTS(2):= CLOSING_STOCK(N_MONTHS) >= FINAL_STOCK_TARGET
 
-  forall(i in indices) CONSTRAINTS(2 + i):= STOCK_LEVEL(i) <= WAREHOUSE_SIZE_LIMIT
+  forall(i in indices) CONSTRAINTS(2 + i):= CLOSING_STOCK(i) <= WAREHOUSE_SIZE_LIMIT
 
   forall (i in 2..N_MONTHS) do ! Start from 2 as already set for month 1.
-    CONSTRAINTS(1 + N_MONTHS + i):= SELLING_VOLUME(i) <= STOCK_LEVEL(i - 1)
+    CONSTRAINTS(1 + N_MONTHS + i):= SELLING_VOLUME(i) <= CLOSING_STOCK(i - 1)
+  end-do
+
+  ! Force cash balance and stock balance to be >= 0
+
+  forall (i in 1..N_MONTHS) do
+    CONSTRAINTS(1 + N_MONTHS*2 + i):= CLOSING_STOCK(i) >= 0
+  end-do
+
+  forall (i in 1..N_MONTHS) do
+    CONSTRAINTS(1 + N_MONTHS*3 + i):= CLOSING_CASH_BALANCE(i) >= 0
   end-do
 
   maximize(profit)
@@ -117,7 +127,7 @@ model java_coffee_problem
   print_status ! Pretty print status of solution.
   writeln("LP Solution:") ! Solution printing
   writeln("    Profit (Euros): ", getobjval)
-  writeln("    Stock remaining in warehouse: ", getsol(STOCK_LEVEL(N_MONTHS)))
+  writeln("    Stock remaining in warehouse: ", getsol(CLOSING_STOCK(N_MONTHS)))
   writeln("    Closing cash balance: ", 20000 + getobjval)
 
   forall(i in indices) do
