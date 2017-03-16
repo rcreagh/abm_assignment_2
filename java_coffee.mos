@@ -80,6 +80,32 @@ model java_coffee_problem
 
   ! Variable definitions
 
+  ! Define CONSTRAINT_NAMES
+
+  !forall (i in indices) do
+  !  CONSTRAINT_NAMES(i) := ("Warehouse Capacity ", MONTH_NAMES(i))
+  !end-do
+
+  !CONSTRAINT_NAMES(N_MONTHS + 1) := ("Sales in ", MONTH_NAMES(1),
+  !                                 " less than initial stock")  
+  !forall (i in 2..N_MONTHS) do
+  !  CONSTRAINT_NAMES(N_MONTHS + i) := (Sales in ", MONTH_NAMES(i),
+  !                                    " less than closing stock in",
+  !                                     MONTH_NAMES(i-1))
+  !end-do
+
+  !CONSTRAINT_NAMES(N_MONTHS*2 + 1) := "Target Final Stock"
+
+  !forall (i in indices) do
+  !  CONSTRAINT_NAMES(N_MONTHS*2 + 1 + i) := ("Stock must be positive ", 
+  !                                       MONTH_NAMES(i))
+  !end-do
+
+  !forall (i in indices) do
+  !  CONSTRAINT_NAMES(N_MONTHS*3 + 1 + i) := ("Cash balance must be positive ", 
+  !                                       MONTH_NAMES(i))
+  !end-do
+
   ! Define stock level calculations
   CLOSING_STOCK(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
 
@@ -102,24 +128,28 @@ model java_coffee_problem
 
   ! Constraints
 
-  ! Set final month stock target.
-  CONSTRAINTS(1):= SELLING_VOLUME(1) <= INITIAL_STOCK
-  CONSTRAINTS(2):= CLOSING_STOCK(N_MONTHS) >= FINAL_STOCK_TARGET
+  ! Set closing stock each month to be less than warehouse capacity
+  forall(i in indices) CONSTRAINTS(i):= CLOSING_STOCK(i) <= WAREHOUSE_SIZE_LIMIT
 
-  forall(i in indices) CONSTRAINTS(2 + i):= CLOSING_STOCK(i) <= WAREHOUSE_SIZE_LIMIT
+  ! Set sales volume for month 1 <= initial stock
+  CONSTRAINTS(N_MONTHS + 1):= SELLING_VOLUME(1) <= INITIAL_STOCK
 
+  ! Set sales volume each month <= closing stock at the end of the last month
   forall (i in 2..N_MONTHS) do ! Start from 2 as already set for month 1.
-    CONSTRAINTS(1 + N_MONTHS + i):= SELLING_VOLUME(i) <= CLOSING_STOCK(i - 1)
+     CONSTRAINTS(N_MONTHS + i):= SELLING_VOLUME(i) <= CLOSING_STOCK(i - 1)
   end-do
+
+  ! Set minimum closing stock at the end of the last month
+  CONSTRAINTS(N_MONTHS*2 + 1):= CLOSING_STOCK(N_MONTHS) >= FINAL_STOCK_TARGET
 
   ! Force cash balance and stock balance to be >= 0
 
   forall (i in 1..N_MONTHS) do
-    CONSTRAINTS(1 + N_MONTHS*2 + i):= CLOSING_STOCK(i) >= 0
+    CONSTRAINTS(N_MONTHS*2 + 1 + i):= CLOSING_STOCK(i) >= 0
   end-do
 
   forall (i in 1..N_MONTHS) do
-    CONSTRAINTS(1 + N_MONTHS*3 + i):= CLOSING_CASH_BALANCE(i) >= 0
+    CONSTRAINTS(N_MONTHS*3 + 1 + i):= CLOSING_CASH_BALANCE(i) >= 0
   end-do
 
   maximize(profit)
