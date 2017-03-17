@@ -5,12 +5,12 @@
   * file java_coffee.mos                                *
   * ````````````````````                                *
   * Find the optimal amount of kgs of coffee to buy and *
-  * sell each month during Q1.                          *
+  * sell each month.                                    *
   *                                                     *
   * Authors: Robert Creagh, Max Buckley                 *
   * Student Numbers: 15200115, 15203431                 *
   *                                                     *
-  * print status procedure copied from                  *
+  * print status procedure reused from                  *
   * potter_goal_preempt.mos by P.Carroll.               *
   *******************************************************!)
 
@@ -23,8 +23,12 @@ model java_coffee_problem
   declarations
     N_MONTHS: integer
     N_CONSTRAINTS: integer
+    FILENAME: string
   end-declarations
-  initializations from 'gendata_1200_month.dat'
+  
+  FILENAME := 'java_coffee.dat' ! This is our data file name.
+  
+  initializations from FILENAME
     N_MONTHS
     N_CONSTRAINTS
   end-initializations
@@ -49,7 +53,7 @@ model java_coffee_problem
     feasibleL: array(no_of_constraints) of real !array to hold the lower feasibility range values
   end-declarations
 
-  initializations from 'gendata_1200_month.dat'
+  initializations from FILENAME
     MONTH_NAMES
     SELLING_PRICES
     PURCHASE_PRICES
@@ -132,12 +136,13 @@ model java_coffee_problem
   writeln("LP Solution:") ! Solution printing
   writeln("    Profit (Euros): ", getobjval)
   writeln("    Stock remaining in warehouse: ", getsol(CLOSING_STOCK(N_MONTHS)))
-  writeln("    Closing cash balance: ", 20000 + getobjval)
+  writeln("    Closing cash balance: ", INITIAL_CASH_BALANCE + getobjval)
 
   forall(i in indices) do
     writeln("Month: ", MONTH_NAMES(i))
     writeln("    Purchase Volume: ", getsol(PURCHASE_VOLUME(i)))
     writeln("    Sales Volume: ", getsol(SELLING_VOLUME(i)))
+  	writeln(" ")
   end-do
 
   ! Sensitivity analysis inspired by sensitivity_pottery_example.mos model
@@ -152,13 +157,15 @@ model java_coffee_problem
      writeln(" ")
   end-do
 
-writeln("***********Dual values for constraints********")
- forall ( j in no_of_constraints) do
+writeln("*********** Dual values for constraints ********")
+writeln("")
+forall ( j in no_of_constraints) do
   writeln("Dual Value for ",CONSTRAINT_NAMES(j)," is: ",getdual(CONSTRAINTS(j)))
 end-do !You might want to check out the strfmt procedure to format output display
 writeln("")
 
-writeln("***********Reduced Costs for activities********")
+writeln("*********** Reduced Costs for activities ********")
+writeln("")
 forall (i in indices) do
   writeln("Buying Price ", MONTH_NAMES(i), ": ", getrcost(PURCHASE_VOLUME(i)))
   writeln("Selling Price ", MONTH_NAMES(i), ": ", getrcost(SELLING_VOLUME(i)))
