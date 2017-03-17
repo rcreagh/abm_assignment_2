@@ -80,32 +80,6 @@ model java_coffee_problem
 
   ! Variable definitions
 
-  ! Define CONSTRAINT_NAMES
-
-  !forall (i in indices) do
-  !  CONSTRAINT_NAMES(i) := ("Warehouse Capacity ", MONTH_NAMES(i))
-  !end-do
-
-  !CONSTRAINT_NAMES(N_MONTHS + 1) := ("Sales in ", MONTH_NAMES(1),
-  !                                 " less than initial stock")  
-  !forall (i in 2..N_MONTHS) do
-  !  CONSTRAINT_NAMES(N_MONTHS + i) := (Sales in ", MONTH_NAMES(i),
-  !                                    " less than closing stock in",
-  !                                     MONTH_NAMES(i-1))
-  !end-do
-
-  !CONSTRAINT_NAMES(N_MONTHS*2 + 1) := "Target Final Stock"
-
-  !forall (i in indices) do
-  !  CONSTRAINT_NAMES(N_MONTHS*2 + 1 + i) := ("Stock must be positive ", 
-  !                                       MONTH_NAMES(i))
-  !end-do
-
-  !forall (i in indices) do
-  !  CONSTRAINT_NAMES(N_MONTHS*3 + 1 + i) := ("Cash balance must be positive ", 
-  !                                       MONTH_NAMES(i))
-  !end-do
-
   ! Define stock level calculations
   CLOSING_STOCK(1) = INITIAL_STOCK + PURCHASE_VOLUME(1) - SELLING_VOLUME(1)
 

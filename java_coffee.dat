@@ -5,9 +5,18 @@ N_CONSTRAINTS: 13 ! Number of constraints (N_MONTHS*4 + 1)
 
 MONTH_NAMES: ["Jan" "Feb" "Mar"] ! String data labels.
 
-CONSTRAINT_NAMES: ["1" "Closing Stock Target" 
-                   "Warehouse size Jan" "Warehouse size Feb" 
-                   "Warehouse size Mar" "6" "7" "8" "9" "10" "11" "12" "13"]
+CONSTRAINT_NAMES: ["Warehouse Capacity Jan" "Warehouse Capacity Feb" 
+                   "Warehouse Capacity Mar"
+                   "Sales in Jan less than initial stock"
+                   "Sales in Feb less than initial stock"
+                   "Sales in Mar less than initial stock"
+                   "Target Final Stock"
+                   "Stock Must be Positive Jan"
+                   "Stock Must be Positive Feb"
+                   "Stock Must be Positive Mar"
+                   "Cash Balance Must be Positive Jan"
+                   "Cash Balance Must be Positive Feb"
+                   "Cash Balance Must be Positive Mar"]
 
 SELLING_PRICES: [3.1 3.25 2.95] ! Euros
 PURCHASE_PRICES: [2.85 2.8 2.9] ! Euros
