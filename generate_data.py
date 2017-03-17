@@ -21,6 +21,10 @@ WAREHOUSE_SIZE_LIMIT: %(WAREHOUSE_SIZE_LIMIT)s ! Units
 FINAL_STOCK_TARGET: %(FINAL_STOCK_TARGET)s ! Units
 """
 
+SIZES = [12, 60, 120, 1200, 12000]
+
+FILENAME = "gendata_%s_month.dat"
+
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
           "Nov", "Dec"]
 
@@ -71,5 +75,8 @@ def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
 
 
 if __name__ == '__main__':
-  generated_data_string = generate_string_data(1200, 20000, 1000, 5000, 2000)
-  print(generated_data_string)
+  for size in SIZES:
+    generated_data_string = generate_string_data(size, 20000, 1000, 5000, 2000)
+    text_file = open(FILENAME % size, "w")
+    text_file.write(generated_data_string)
+    text_file.close()

@@ -1,11 +1,11 @@
 
 N_MONTHS: 12 ! Number of months.
-N_CONSTRAINTS: 49 ! Number of constraints (N_MONTHS*4 + 1)
+N_CONSTRAINTS: 49 ! Number of constraints (N_MONTHS * 4 + 1)
 
 MONTH_NAMES: ["Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"] ! String data labels.
 CONSTRAINT_NAMES: ["Warehouse Capacity Jan" "Warehouse Capacity Feb" "Warehouse Capacity Mar" "Warehouse Capacity Apr" "Warehouse Capacity May" "Warehouse Capacity Jun" "Warehouse Capacity Jul" "Warehouse Capacity Aug" "Warehouse Capacity Sep" "Warehouse Capacity Oct" "Warehouse Capacity Nov" "Warehouse Capacity Dec" "Sales in Jan Less Than Stock at the beginning of Jan" "Sales in Feb Less Than Stock at the beginning of Feb" "Sales in Mar Less Than Stock at the beginning of Mar" "Sales in Apr Less Than Stock at the beginning of Apr" "Sales in May Less Than Stock at the beginning of May" "Sales in Jun Less Than Stock at the beginning of Jun" "Sales in Jul Less Than Stock at the beginning of Jul" "Sales in Aug Less Than Stock at the beginning of Aug" "Sales in Sep Less Than Stock at the beginning of Sep" "Sales in Oct Less Than Stock at the beginning of Oct" "Sales in Nov Less Than Stock at the beginning of Nov" "Sales in Dec Less Than Stock at the beginning of Dec" "Target Final Stock" "Stock Must be Positive Jan" "Stock Must be Positive Feb" "Stock Must be Positive Mar" "Stock Must be Positive Apr" "Stock Must be Positive May" "Stock Must be Positive Jun" "Stock Must be Positive Jul" "Stock Must be Positive Aug" "Stock Must be Positive Sep" "Stock Must be Positive Oct" "Stock Must be Positive Nov" "Stock Must be Positive Dec" "Cash Balance Must be Positive Jan" "Cash Balance Must be Positive Feb" "Cash Balance Must be Positive Mar" "Cash Balance Must be Positive Apr" "Cash Balance Must be Positive May" "Cash Balance Must be Positive Jun" "Cash Balance Must be Positive Jul" "Cash Balance Must be Positive Aug" "Cash Balance Must be Positive Sep" "Cash Balance Must be Positive Oct" "Cash Balance Must be Positive Nov" "Cash Balance Must be Positive Dec"]
-SELLING_PRICES: [3.06 2.93 3.02 2.81 2.98 3.07 2.8 3.08 3.21 3.33 3.0 3.31] ! Euros
-PURCHASE_PRICES: [2.82 2.83 2.85 2.81 2.85 2.9 2.9 2.91 2.82 2.85 2.9 2.78] ! Euros
+SELLING_PRICES: [3.2 3.0 2.94 3.04 3.14 3.03 3.46 2.99 3.06 3.07 3.23 3.33] ! Euros
+PURCHASE_PRICES: [2.86 2.82 2.85 2.81 2.8 2.89 2.94 2.82 2.85 2.94 2.79 2.89] ! Euros
 
 INITIAL_CASH_BALANCE: 20000 ! Euros
 INITIAL_STOCK: 1000 ! Units
@@ -13,4 +13,3 @@ INITIAL_STOCK: 1000 ! Units
 WAREHOUSE_SIZE_LIMIT: 5000 ! Units
 
 FINAL_STOCK_TARGET: 2000 ! Units
-

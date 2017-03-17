@@ -16,6 +16,11 @@
 
 model java_coffee_problem
  uses "mmxprs"                   ! Gain access to the Xpress-Optimizer solver
+ 	
+	setparam("XPRS_heurstrategy", 0) !turn off heuristic strategy
+	setparam("XPRS_mippresolve", 0) !turn off mip pre-solve
+	setparam("XPRS_presolve", 0) !turn off pre-solve
+	setparam("XPRS_CUTSTRATEGY",0)
 
   ! Need to declare and initalize N_MONTHS and N_CONSTRAINTS first so as to be 
   ! able to initalize
@@ -26,7 +31,7 @@ model java_coffee_problem
     FILENAME: string
   end-declarations
   
-  FILENAME := 'java_coffee.dat' ! This is our data file name.
+  FILENAME := 'gendata_60_month.dat' ! This is our data file name.
   
   initializations from FILENAME
     N_MONTHS
@@ -136,6 +141,7 @@ model java_coffee_problem
   writeln("LP Solution:") ! Solution printing
   writeln("    Profit (Euros): ", getobjval)
   writeln("    Stock remaining in warehouse: ", getsol(CLOSING_STOCK(N_MONTHS)))
+  writeln("    Change in warehouse stock: ", getsol(CLOSING_STOCK(N_MONTHS) - INITIAL_STOCK))
   writeln("    Closing cash balance: ", INITIAL_CASH_BALANCE + getobjval)
 
   forall(i in indices) do
