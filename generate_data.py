@@ -6,7 +6,7 @@ import numpy as np
 
 DATAFILE_TEMPLATE = """
 N_MONTHS: %(N_MONTHS)s ! Number of months.
-N_CONSTRAINTS: %(N_CONSTRAINTS)s ! Number of constraints (N_MONTHS*4 + 1)
+N_CONSTRAINTS: %(N_CONSTRAINTS)s ! Number of constraints (N_MONTHS * 4 + 1)
 
 MONTH_NAMES: [%(MONTH_NAMES)s] ! String data labels.
 CONSTRAINT_NAMES: [%(GENERATE_CONSTRAINT_NAMES)s]
@@ -49,8 +49,10 @@ def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
                          final_stock):
   """Generate the string for the datafile."""
   months = get_month_list(n_months)
-  purchase_prices_np = np.around(np.random.normal(2.85, .05, n_months), decimals=2)
-  selling_prices_np = np.around(np.random.normal(3.1, .15, n_months), decimals=2)
+  purchase_prices_np = np.around(np.random.normal(
+      2.85, .05, n_months), decimals=2)
+  selling_prices_np = np.around(np.random.normal(
+      3.1, .15, n_months), decimals=2)
   selling_prices = ["%s" % number for number in selling_prices_np]
   purchase_prices = ["%s" % number for number in purchase_prices_np]
 
@@ -60,12 +62,12 @@ def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
       'MONTH_NAMES': stringify_list(months),
       'GENERATE_CONSTRAINT_NAMES': stringify_list(constraints),
       'SELLING_PRICES': ' '.join(selling_prices),
-      'PURCHASE_PRICES': ' '.join(purchase_prices), 'INITIAL_CASH_BALANCE': initial_cash,
+      'PURCHASE_PRICES': ' '.join(purchase_prices),
+      'INITIAL_CASH_BALANCE': initial_cash,
       'INITIAL_STOCK': initial_stock, 'WAREHOUSE_SIZE_LIMIT':
       warehouse_size, 'FINAL_STOCK_TARGET': final_stock}
 
   return DATAFILE_TEMPLATE % values
-
 
 
 if __name__ == '__main__':
