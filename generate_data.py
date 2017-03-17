@@ -6,11 +6,10 @@ import numpy as np
 
 DATAFILE_TEMPLATE = """
 N_MONTHS: %(N_MONTHS)s ! Number of months.
-N_CONSTRAINTS: %(N_CONSTRAINTS)s ! Number of constraints (N_MONTHS*2 + 1)
+N_CONSTRAINTS: %(N_CONSTRAINTS)s ! Number of constraints (N_MONTHS*4 + 1)
 
 MONTH_NAMES: [%(MONTH_NAMES)s] ! String data labels.
-CONSTRAINT_NAMES: ["Initial Stock" "Closing Stock Target"
-                   %(GENERATE_CONSTRAINT_NAMES)s]
+CONSTRAINT_NAMES: [%(GENERATE_CONSTRAINT_NAMES)s]
 SELLING_PRICES: [%(SELLING_PRICES)s] ! Euros
 PURCHASE_PRICES: [%(PURCHASE_PRICES)s] ! Euros
 
@@ -36,8 +35,14 @@ def get_month_list(n_months):
 
 def generate_constraints(month_list):
   constraints = []
-  constraints.extend(["Warehouse size %s" % month for month in month_list])
-  constraints.extend(["Stock level %s" % month for month in month_list])
+  constraints.extend(["Warehouse Capacity %s" % month for month in month_list])
+  constraints.extend(["Sales in %s Less Than Stock at the beginning of %s" %
+      (month, month) for month in month_list])
+  constraints.extend(["Target Final Stock"])
+  constraints.extend([
+      "Stock Must be Positive %s" % month for month in month_list])
+  constraints.extend([
+      "Cash Balance Must be Positive %s" % month for month in month_list])
   return constraints
 
 def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
@@ -51,7 +56,7 @@ def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
 
   constraints = generate_constraints(months)
   values = {
-      'N_MONTHS': n_months, 'N_CONSTRAINTS': 2 * n_months + 1,
+      'N_MONTHS': n_months, 'N_CONSTRAINTS': 4 * n_months + 1,
       'MONTH_NAMES': stringify_list(months),
       'GENERATE_CONSTRAINT_NAMES': stringify_list(constraints),
       'SELLING_PRICES': ' '.join(selling_prices),

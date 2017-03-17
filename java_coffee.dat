@@ -7,9 +7,9 @@ MONTH_NAMES: ["Jan" "Feb" "Mar"] ! String data labels.
 
 CONSTRAINT_NAMES: ["Warehouse Capacity Jan" "Warehouse Capacity Feb" 
                    "Warehouse Capacity Mar"
-                   "Sales in Jan less than initial stock"
-                   "Sales in Feb less than initial stock"
-                   "Sales in Mar less than initial stock"
+                   "Sales in Jan less than closing stock in Dec"
+                   "Sales in Feb less than closing stock in Jan"
+                   "Sales in Mar less than closing stock in Feb"
                    "Target Final Stock"
                    "Stock Must be Positive Jan"
                    "Stock Must be Positive Feb"
