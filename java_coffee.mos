@@ -41,7 +41,8 @@ model java_coffee_problem
    ! Main declarations section
   declarations
     indices = 1..N_MONTHS ! Indices for indexing our months.
-    no_of_constraints = 1..N_CONSTRAINTS ! Labels for numbering constraints.
+    no_of_constraints = 1..N_CONSTRAINTS ! Labels for numbering constraints
+    iter: real
     CONSTRAINTS: array(no_of_constraints) of linctr
     CONSTRAINT_NAMES: array(no_of_constraints) of string
     PURCHASE_VOLUME, SELLING_VOLUME: array(indices) of mpvar
@@ -135,10 +136,16 @@ model java_coffee_problem
     CONSTRAINTS(N_MONTHS * 3 + 1 + i):= CLOSING_CASH_BALANCE(i) >= 0
   end-do
 
+  ! Procedure to solve the model
+  procedure solve
   maximize(profit)
 
   print_status ! Pretty print status of solution.
-  writeln("LP Solution:") ! Solution printing
+  if (iter = 1) then
+    writeln("LP Solution:") ! Solution printing
+  else
+    writeln("IP Solution:")
+  end-if
   writeln("    Profit (Euros): ", getobjval)
   writeln("    Stock remaining in warehouse: ", getsol(CLOSING_STOCK(N_MONTHS)))
   writeln("    Change in warehouse stock: ", getsol(CLOSING_STOCK(N_MONTHS) - INITIAL_STOCK))
@@ -150,6 +157,10 @@ model java_coffee_problem
     writeln("    Sales Volume: ", getsol(SELLING_VOLUME(i)))
   	writeln(" ")
   end-do
+end-procedure
+
+iter:=1
+solve
 
   ! Sensitivity analysis inspired by sensitivity_pottery_example.mos model
   ! covered in class.
@@ -176,5 +187,14 @@ forall (i in indices) do
   writeln("Buying Price ", MONTH_NAMES(i), ": ", getrcost(PURCHASE_VOLUME(i)))
   writeln("Selling Price ", MONTH_NAMES(i), ": ", getrcost(SELLING_VOLUME(i)))
 end-do
+
+! Add integer constraints to compare integer solution
+forall (i in indices) do
+  PURCHASE_VOLUME(i) is_integer
+  SELLING_VOLUME(i) is_integer
+end-do
+
+iter:= iter + 1
+solve
 
 end-model
