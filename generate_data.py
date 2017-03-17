@@ -69,5 +69,5 @@ def generate_string_data(n_months, initial_cash, initial_stock, warehouse_size,
 
 
 if __name__ == '__main__':
-  generated_data_string = generate_string_data(120, 20000, 1000, 5000, 2000)
+  generated_data_string = generate_string_data(1200, 20000, 1000, 5000, 2000)
   print(generated_data_string)

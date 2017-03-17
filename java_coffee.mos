@@ -24,7 +24,7 @@ model java_coffee_problem
     N_MONTHS: integer
     N_CONSTRAINTS: integer
   end-declarations
-  initializations from 'gendata_120_month.dat'
+  initializations from 'gendata_1200_month.dat'
     N_MONTHS
     N_CONSTRAINTS
   end-initializations
@@ -49,7 +49,7 @@ model java_coffee_problem
     feasibleL: array(no_of_constraints) of real !array to hold the lower feasibility range values
   end-declarations
 
-  initializations from 'gendata_120_month.dat'
+  initializations from 'gendata_1200_month.dat'
     MONTH_NAMES
     SELLING_PRICES
     PURCHASE_PRICES
